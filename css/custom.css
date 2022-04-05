@@ -1,0 +1,38 @@
+ .form-control{
+    background-color: rgb(253, 253, 251) !important;
+   
+    border-color: rgb(211, 209, 209);
+    color: rgba(53, 47, 47, 0.911) !important;
+}
+.form-group ::placeholder{
+    color: rgba(173, 173, 173, 0.424) !important;
+}
+.form-control-sm{
+    height: 30px !important;
+}
+.custom-file-input{
+    color: #fff;
+    background-color: rgb(11, 42, 151) !important;
+}
+.input-group-button{
+ background: rgb(11, 42, 151);
+ color: #fff;
+}
+.authincation{
+    background: url(../images/___media_upload_cost_466224253\ \(1\).jpg);
+    background-size: 100%;
+    background-blend-mode: color;
+    background-color: rgba(20, 1, 70, 0.562) !important;
+}
+.authincation-content{
+    opacity: 0.95;
+    background: rgba(20, 1, 65, 0.445);
+}
+.fas{
+    
+    size: 21px !important;
+}
+
+.avtivity-card{
+    height: 200px !important;
+}
