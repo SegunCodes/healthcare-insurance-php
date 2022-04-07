@@ -16,6 +16,13 @@
             <label>Email</label>
             <input type="email" required readonly name="email" value="<?php echo $_SESSION["SESSION_EMAIL"]?>" class="form-control">
         </div>
+        <div class="form-group col-md-6">
+            <label>Upload Profile Picture</label>
+            <div class="custom-file">
+                <input type="file" name="file" class="custom-file-input">
+                <label name="file"  class="custom-file-label"></label>
+            </div> 
+        </div>
     </div>
     <div class="form-row">
         <div class="form-group col-md-7">

@@ -57,24 +57,40 @@ if (mysqli_num_rows($query)>0) {
                                             if(isset($_POST['upload']))
                                                 {
                                                 $patient = mysqli_real_escape_string($con, $_POST['pname']);
+                                                // var_dump($patient);
                                                 $code = mysqli_real_escape_string($con, $_POST['code']);
-                                                $document = mysqli_real_escape_string($con, $_POST['name']);
+                                                // $documents = mysqli_real_escape_string($con, $_POST['name']);
                                                 $hospital = mysqli_real_escape_string($con, $_POST['hospital']);
                                                 $date = date("Y/M/D h:i:a");
                                                 // numerous file insertion into database
-                                                $filecount = count($_FILES['file']['name']);
-                                                for ($i=0; $i < $filecount; $i++) { 
-                                                    $filename = $_FILES['file']['name'][$i];
-                                                    $sql = mysqli_query($con, "INSERT INTO records(`patient`, `auth_code`, `document`, `file`, `hospital`, `date`)
-                                                    VALUES ('{$patient}', '{$code}', '{$document}', '{$filename}', '{$hospital}', '{$date}')");
-                                                    if ($sql) {
-                                                        $msg = "<div class='alert alert-success'>Document Uploaded!</div>";
-                                                    } else {
-                                                        $msg = "<div class='alert alert-danger'>Error in Uploading</div>";
+                                                $extension = array('jpeg','jpg','png','gif');
+                                                foreach ($_FILES['image']['tmp_name'] as $key => $value) {
+
+                                                    $document = $_POST['name'][$key];
+                                                    $filename = $_FILES['image']['name'][$key];
+                                                    $filename_tmp = $_FILES['image']['tmp_name'][$key];
+                                                    echo '<br>';
+                                                    $ext = pathinfo($filename,PATHINFO_EXTENSION);
+                                                    $finalImg = '';
+                                                    if (in_array($ext,$extension)) {
+                                                        if (!file_exists('includes/images/'.$filename)) {
+                                                            move_uploaded_file($filename_tmp, 'includes/images/'.$filename);
+                                                            $finalImg=$filename;
+                                                        }else{
+                                                            $filename=str_replace('.','-', basename($filename,$ext));
+                                                            $newfilename = $filename.time().".".$ext;
+                                                            move_uploaded_file($filename_tmp, 'includes/images/'.$newfilename);
+                                                            $finalImg=$newfilename;
+                                                        }
+                                                        $sql = mysqli_query($con, "INSERT INTO records(`patient`, `auth_code`, `document`, `file`, `hospital`, `date`)
+                                                        VALUES ('{$patient}', '{$code}', '{$document}', '{$finalImg}', '{$hospital}', '{$date}')");
+                                                        if ($sql) {
+                                                            $msg = "<div class='alert alert-success'>Document Uploaded!</div>";
+                                                        } else {
+                                                            $msg = "<div class='alert alert-danger'>Error in Uploading</div>";
+                                                        }
                                                     }
                                                 }
-                                                @$move = move_uploaded_file($_FILES['file']['tmp_name'][$i], 'includes/images/'.$filename);
-                                                // var_dump($move);
                                             }
                                             $sql1 = mysqli_query($con,"SELECT * FROM authorization WHERE auth_code = '{$_GET["auth"]}'");
                                             // var_dump($_GET["auth"]);
@@ -85,15 +101,12 @@ if (mysqli_num_rows($query)>0) {
                                         ?>
                                             <?php echo $msg;?>
                                             <form method="POST" enctype="multipart/form-data">
-                                                <div class="form-row" id="file-item">
-                                                    <div class="form-group col-md-6">
-                                                        <label class="mb-1"><strong>Document Name</strong></label>
-                                                        <input type="name" name="name" required class="form-control">
-                                                    </div>
-                                                    <div class="form-group col-md-6">
-                                                        <label class="mb-1"><strong>Upload Document</strong></label>
-                                                        <input type="file" multiple required name="file[]" class="form-control">
-                                                    </div>
+                                                <div class="form-row" id="file_item">
+                                                    
+                                                </div>
+                                                <div required class="form-group">
+                                                    <button class="btn btn-primary btn-sm" id="add">Add File</button>
+                                                    <button class="btn btn-sm btn-danger" id="remove">Remove File</button>
                                                 </div>
                                                 <div class="form-group">
                                                     <!-- <label class="mb-1"><strong>Auth Code</strong></label> -->
@@ -153,6 +166,32 @@ if (mysqli_num_rows($query)>0) {
     ***********************************-->
 
     <?php include("template/script.php") ?>
+    <script>
+        addNewRow();
+
+        $("#add").click(function(){
+            addNewRow();
+        })
+
+        function addNewRow(){
+            $.ajax({
+                url: "new_row.php",
+                method:"POST",
+                data:{getNewItem:1},
+                success:function(data){
+                    $("#file_item").append(data);
+                    var n = 0;
+                    $(".number").each(function(){
+                        $(this).html(++n);
+                    })
+                }
+            })
+        }
+
+        $("#remove").click(function(){
+            $("#file_item").children("tr:last").remove();
+        })
+    </script>
     <script>
 		function carouselReview(){
 			/*  testimonial one function by = owl.carousel.js */

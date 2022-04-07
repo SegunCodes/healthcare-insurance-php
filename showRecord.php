@@ -17,7 +17,10 @@ if (isset($_POST["showPatient"])) {
                         <tr>
                           <img class="img-fluid" width="200px" height="200px" src="includes/images/'.$row["file"].'">
                         </tr>
-                      </div>
+                      </div><br>
+                      <center>
+                        <a class="btn btn-secondary" download href="includes/images/'.$row["file"].'">Download Image</a>
+                      </center>
                     </div>
                   </div>
                 </div>

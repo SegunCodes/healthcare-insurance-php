@@ -42,6 +42,18 @@ if (mysqli_num_rows($query)>0) {
 				<div class="row">
 					<div class="col-xl-6 col-xxl-12">
 						<div class="row">
+							<?php
+								include('includes/db.php');
+								//selecting hospital whose session is set
+								$sql = mysqli_query($con,"SELECT * FROM hospital WHERE email = '{$_SESSION["SESSION_EMAIL1"]}'");
+							
+                                while ($row=mysqli_fetch_array($sql)) {
+                                    $hid = $row["hospital_id"];
+                                    //select all from allocation where hospital_id is same as that of hospital in session
+                                    $sql1 = mysqli_query($con, "SELECT (SELECT COUNT(*) FROM allocation WHERE hospital = $hid) as total FROM allocation");
+                                    while ($rw=mysqli_fetch_array($sql1)) {
+										$total = $rw["total"];
+                                    } ?>
 							<div class="col-sm-6">
 								<div class="card avtivity-card">
 									<div class="card-body">
@@ -51,7 +63,7 @@ if (mysqli_num_rows($query)>0) {
 											</span>
 											<div class="media-body">
 												<p class="fs-20 mb-2">No. of Patients/Enrollees</p>
-												<span class="title text-black font-w600">3</span>
+												<span class="title text-black font-w600"><?php echo $total;?></span>
 											</div>
 										</div>
 										<div class="progress" style="height:5px;">
@@ -63,6 +75,20 @@ if (mysqli_num_rows($query)>0) {
 									<div class="effect bg-success"></div>
 								</div>
 							</div>
+							<?php
+                                } ?>
+							<?php
+								include('includes/db.php');
+								//selecting hospital whose session is set
+								$sql = mysqli_query($con,"SELECT * FROM hospital WHERE email = '{$_SESSION["SESSION_EMAIL1"]}'");
+							
+                                while ($row=mysqli_fetch_array($sql)) {
+                                    $hid = $row["hospital_id"];
+                                    //select all from allocation where hospital_id is same as that of hospital in session
+                                    $sql1 = mysqli_query($con, "SELECT (SELECT COUNT(*) FROM allocation WHERE hospital = $hid AND medic_record = 'open') as total FROM allocation");
+                                    while ($rw=mysqli_fetch_array($sql1)) {
+										$total = $rw["total"];
+                                    } ?>
 							<div class="col-sm-6">
 								<div class="card avtivity-card">
 									<div class="card-body">
@@ -72,7 +98,7 @@ if (mysqli_num_rows($query)>0) {
 											</span>
 											<div class="media-body">
 												<p class="fs-20 mb-2">No. of Medical Investigations</p>
-												<span class="title text-black font-w600">11</span>
+												<span class="title text-black font-w600"><?php echo $total;?></span>
 											</div>
 										</div>
 										<div class="progress" style="height:5px;">
@@ -84,6 +110,8 @@ if (mysqli_num_rows($query)>0) {
 									<div class="effect bg-secondary"></div>
 								</div>
 							</div>
+							<?php
+                                } ?>
 							<?php 
 								include('includes/db.php');
 								$sql = mysqli_query($con,"SELECT * FROM hospital WHERE email = '{$_SESSION['SESSION_EMAIL1']}'");

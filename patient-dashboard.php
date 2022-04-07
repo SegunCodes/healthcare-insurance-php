@@ -42,6 +42,17 @@
 				<div class="row">
 					<div class="col-xl-6 col-xxl-12">
 						<div class="row">
+							<?php
+							include('includes/db.php');
+							//selecting patient whose session is set
+							$sql = mysqli_query($con,"SELECT * FROM patient WHERE email = '{$_SESSION['SESSION_EMAIL']}'");
+						
+							while ($row=mysqli_fetch_array($sql)) {
+								$pid = $row["patient_id"];
+								$sql1 = mysqli_query($con, "SELECT (SELECT COUNT(*) FROM allocation WHERE patient = $pid AND medic_record = 'open') as total FROM allocation");
+								while ($rw=mysqli_fetch_array($sql1)) {
+									$total = $rw["total"];
+								} ?>
 							<div class="col-sm-6">
 								<div class="card avtivity-card">
 									<div class="card-body">
@@ -51,7 +62,7 @@
 											</span>
 											<div class="media-body">
 												<p class="fs-14 mb-2">Open Medical Investigation </p>
-												<span class="title text-black font-w600">3</span>
+												<span class="title text-black font-w600"><?php echo $total?></span>
 											</div>
 										</div>
 										<div class="progress" style="height:5px;">
@@ -63,6 +74,19 @@
 									<div class="effect bg-success"></div>
 								</div>
 							</div>
+							<?php
+                                } ?>
+							<?php
+								include('includes/db.php');
+								//selecting patient whose session is set
+								$sql = mysqli_query($con,"SELECT * FROM patient WHERE email = '{$_SESSION['SESSION_EMAIL']}'");
+							
+								while ($row=mysqli_fetch_array($sql)) {
+									$pid = $row["patient_id"];
+									$sql1 = mysqli_query($con, "SELECT (SELECT COUNT(*) FROM records WHERE patient = $pid) as total FROM records");
+									while ($rw=mysqli_fetch_array($sql1)) {
+										$total = $rw["total"];
+									} ?>
 							<div class="col-sm-6">
 								<div class="card avtivity-card">
 									<div class="card-body">
@@ -71,8 +95,8 @@
 												<i class="fas fa-bed"></i>
 											</span>
 											<div class="media-body">
-												<p class="fs-14 mb-2">No. of Hospital Used</p>
-												<span class="title text-black font-w600">11</span>
+												<p class="fs-14 mb-2">Medical records</p>
+												<span class="title text-black font-w600"><?php echo $total;?></span>
 											</div>
 										</div>
 										<div class="progress" style="height:5px;">
@@ -84,6 +108,8 @@
 									<div class="effect bg-secondary"></div>
 								</div>
 							</div>
+							<?php
+                                } ?>
 						</div>
 					</div>
 				</div>

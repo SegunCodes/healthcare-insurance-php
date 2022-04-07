@@ -1,4 +1,4 @@
-<?php include("template/header.php") //include header file?>
+<?php include("template/header.php"); //include header file ?>
 <?php 
     session_start();// session start
     if (!isset($_SESSION["SESSION_EMAIL"])) {
@@ -79,9 +79,13 @@
                                         $pregnancy = mysqli_real_escape_string($con, $_POST['pregnancy']);
                                         $bloodgroup = mysqli_real_escape_string($con, $_POST['bloodgroup']);
                                         $genotype = mysqli_real_escape_string($con, $_POST['genotype']);
+                                        $filename = $_FILES['file']['name'];
+                                        $tempname = $_FILES['file']['tmp_name'];
+                                        $folder = 'includes/images/'.$filename;
+                                        $move = move_uploaded_file($tempname, $folder);
                                         if (mysqli_num_rows(mysqli_query($con, "SELECT * FROM patient WHERE email='{$email}'")) > 0) {
                                             $sqli = "UPDATE `patient` SET `fname`='{$fname}',`lname`='{$lname}',
-                                            `phone`='{$phone}',`email`='{$email}',`state`='{$rw["name"]}',`lga`='{$w["name"]}',
+                                            `phone`='{$phone}',`email`='{$email}',`image`='{$filename}',`state`='{$rw["name"]}',`lga`='{$w["name"]}',
                                             `occupation`='{$occupation}',`address`='{$address}',`dob`='{$dob}',`gender`='{$gender}',
                                             `disability`='{$disability}',`type`='{$type}',`sickle_cell`='{$sickle}',`pregnancy`='{$pregnancy}',
                                             `blood_group`='{$bloodgroup}',`genotype`='{$genotype}' WHERE email='{$email}'";
@@ -93,9 +97,9 @@
                                                 $msg = "<div class='alert alert-danger'>Unexpected Error!Please Try Again</div>";
                                             }
                                         }else{
-                                            $sql = "INSERT INTO `patient`(`fname`, `lname`, `phone`, `email`, `state`, `lga`, `occupation`, `address`, 
+                                            $sql = "INSERT INTO `patient`(`fname`, `lname`, `phone`, `email`, `image`, `state`, `lga`, `occupation`, `address`, 
                                             `dob`, `gender`, `disability`, `type`, `sickle_cell`, `pregnancy`, `blood_group`, `genotype`) 
-                                            VALUES ('{$fname}','{$lname}','{$phone}','{$email}','{$rw["name"]}','{$w["name"]}','{$occupation}','{$address}',
+                                            VALUES ('{$fname}','{$lname}','{$phone}','{$email}','{$filename}','{$rw["name"]}','{$w["name"]}','{$occupation}','{$address}',
                                             '{$dob}','{$gender}','{$disability}','{$type}','{$sickle}','{$pregnancy}','{$bloodgroup}','{$genotype}')";
 
                                             $result = mysqli_query($con, $sql);
@@ -163,7 +167,15 @@
                                                 <label>Email</label>
                                                 <input type="email" required readonly name="email" value="<?php echo $_SESSION["SESSION_EMAIL"]?>" class="form-control">
                                             </div>
-                                        </div>
+                                            <div class="form-group col-md-6">
+                                                <label>Update Profile Picture</label>
+                                                <div class="custom-file">
+                                                    <input type="file" name="file" class="custom-file-input">
+                                                    <label name="file" required  class="custom-file-label"></label>
+                                                    <img height="100" width="100" src="includes/images/<?php echo $row["image"];?>">
+                                                </div> 
+                                            </div>
+                                        </div><br>
                                         <div class="form-row">
                                             <div class="form-group col-md-7">
                                                 <label>State</label>

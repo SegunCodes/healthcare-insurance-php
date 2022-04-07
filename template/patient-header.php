@@ -54,7 +54,7 @@
                         while ($row=mysqli_fetch_array($sql)) {
                             ?>
                         <a class="nav-link" href="javascript:void(0)" role="button" data-toggle="dropdown">
-                            <!-- <img src="images/profile/17.jpg" width="20" alt=""/> -->
+                            <img src="includes/images/<?php echo $row["image"];?>" width="20" alt=""/>
                             <div class="header-info">
                                 <span class="text-black"><strong><?php echo $row["fname"]. ' '; echo $row["lname"] //display patient full name?></strong></span>
                             </div>

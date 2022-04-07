@@ -34,6 +34,11 @@ if (mysqli_num_rows($query)>0) {
                 <div class="row">
                     <div class="col-xl-6 col-xxl-12">
                         <div class="row">
+                            <?php
+                                include('includes/db.php');
+								$sql = mysqli_query($con,"SELECT count(id) FROM patient");
+                                while ($row=mysqli_fetch_array($sql)) {
+                                    $id = $row[0]; ?>
                             <div class="col-sm-6">
                                 <div class="card avtivity-card">
                                     <div class="card-body">
@@ -43,7 +48,7 @@ if (mysqli_num_rows($query)>0) {
                                             </span>
                                             <div class="media-body">
                                                 <p class="fs-20 mb-2">No. of Patients/Enrollees</p>
-                                                <span class="title text-black font-w600">31</span>
+                                                <span class="title text-black font-w600"><?php echo $id?></span>
                                             </div>
                                         </div>
                                         <div class="progress" style="height:5px;">
@@ -55,6 +60,13 @@ if (mysqli_num_rows($query)>0) {
                                     <div class="effect bg-success"></div>
                                 </div>
                             </div>
+                            <?php
+                                } ?>
+                            <?php
+                                include('includes/db.php');
+								$sql = mysqli_query($con,"SELECT count(id) FROM patient WHERE status = 'Approved'");
+                                while ($row=mysqli_fetch_array($sql)) {
+                                    $id = $row[0]; ?>
                             <div class="col-sm-6">
                                 <div class="card avtivity-card">
                                     <div class="card-body">
@@ -64,7 +76,7 @@ if (mysqli_num_rows($query)>0) {
                                             </span>
                                             <div class="media-body">
                                                 <p class="fs-20 mb-2">Vetted Patients/Enrollees</p>
-                                                <span class="title text-black font-w600">11</span>
+                                                <span class="title text-black font-w600"><?php echo $id?></span>
                                             </div>
                                         </div>
                                         <div class="progress" style="height:5px;">
@@ -76,6 +88,13 @@ if (mysqli_num_rows($query)>0) {
                                     <div class="effect bg-warning"></div>
                                 </div>
                             </div>
+                            <?php
+                                } ?>
+                            <?php
+                                include('includes/db.php');
+								$sql = mysqli_query($con,"SELECT count(id) FROM hospital");
+                                while ($row=mysqli_fetch_array($sql)) {
+                                    $id = $row[0]; ?>
                             <div class="col-sm-6">
                                 <div class="card avtivity-card">
                                     <div class="card-body">
@@ -92,7 +111,7 @@ if (mysqli_num_rows($query)>0) {
                                             </span>
                                             <div class="media-body">
                                                 <p class="fs-20 mb-2">No. of Hospitals</p>
-                                                <span class="title text-black font-w600">21</span>
+                                                <span class="title text-black font-w600"><?php echo $id ?></span>
                                             </div>
                                         </div>
                                         <div class="progress" style="height:5px;">
@@ -104,6 +123,13 @@ if (mysqli_num_rows($query)>0) {
                                     <div class="effect bg-secondary"></div>
                                 </div>
                             </div>
+                            <?php
+                                } ?>
+                            <?php
+                                include('includes/db.php');
+								$sql = mysqli_query($con,"SELECT count(id) FROM hospital WHERE status = 'Approved'");
+                                while ($row=mysqli_fetch_array($sql)) {
+                                    $id = $row[0]; ?>
                             <div class="col-sm-6">
                                 <div class="card avtivity-card">
                                     <div class="card-body">
@@ -113,7 +139,7 @@ if (mysqli_num_rows($query)>0) {
                                             </span>
                                             <div class="media-body">
                                                 <p class="fs-20 mb-2">Approved Hospitals</p>
-                                                <span class="title text-black font-w600">11</span>
+                                                <span class="title text-black font-w600"><?php echo $id ?></span>
                                             </div>
                                         </div>
                                         <div class="progress" style="height:5px;">
@@ -125,7 +151,14 @@ if (mysqli_num_rows($query)>0) {
                                     <div class="effect bg-info"></div>
                                 </div>
                             </div>
-                            
+                            <?php
+                                } ?>
+                            <?php
+                                include('includes/db.php');
+								$sql = mysqli_query($con,"SELECT count(id) FROM authorization");
+                                while ($row=mysqli_fetch_array($sql)) {
+                                    $id = $row[0]; 
+                                ?>
                             <div class="col-sm-6">
                                 <div class="card avtivity-card">
                                     <div class="card-body">
@@ -135,7 +168,7 @@ if (mysqli_num_rows($query)>0) {
                                             </span>
                                             <div class="media-body">
                                                 <p class="fs-20 mb-2">Medical Investigations</p>
-                                                <span class="title text-black font-w600">11</span>
+                                                <span class="title text-black font-w600"><?php echo $id ?></span>
                                             </div>
                                         </div>
                                         <div class="progress" style="height:5px;">
@@ -147,6 +180,13 @@ if (mysqli_num_rows($query)>0) {
                                     <div class="effect bg-danger"></div>
                                 </div>
                             </div>
+                            <?php
+                                } ?>
+                            <?php
+                                include('includes/db.php');
+								$sql = mysqli_query($con,"SELECT count(id) FROM authorization WHERE status = '1'");
+                                while ($row=mysqli_fetch_array($sql)) {
+                                    $id = $row[0]; ?>
                             <div class="col-sm-6">
                                 <div class="card avtivity-card">
                                     <div class="card-body">
@@ -156,7 +196,7 @@ if (mysqli_num_rows($query)>0) {
                                             </span>
                                             <div class="media-body">
                                                 <p class="fs-20 mb-2">Authorised Passcodes</p>
-                                                <span class="title text-black font-w600">41</span>
+                                                <span class="title text-black font-w600"><?php echo $id; ?></span>
                                             </div>
                                         </div>
                                         <div class="progress" style="height:5px;">
@@ -168,6 +208,8 @@ if (mysqli_num_rows($query)>0) {
                                     <div class="effect bg-primary"></div>
                                 </div>
                             </div>
+                            <?php
+                                } ?>
                         </div>
                     </div>
                 </div>

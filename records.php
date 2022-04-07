@@ -64,45 +64,52 @@ if (mysqli_num_rows($query)>0) {
                                         
                                         <tbody>
                                         <?php 
+                                        $allData=[];
                                         include('includes/db.php');
+                                        //selecting hospital whose session is set
                                         $sql = mysqli_query($con,"SELECT * FROM hospital WHERE email = '{$_SESSION["SESSION_EMAIL1"]}'");//select specific hospital whose session is set
-                                        //   var_dump($sql);
                                         while ($row=mysqli_fetch_array($sql)) {
                                             $hid = $row["hospital_id"];
+                                            //select all from records where hospital_id is same as that of hospital in session
                                             $sql1 = mysqli_query($con,"SELECT * FROM records WHERE hospital = $hid");
-                                            // var_dump($sql1);
                                             while ($rw=mysqli_fetch_array($sql1)) {
                                                 $id = $rw["id"];
                                                 $auth = $rw["auth_code"];
                                                 $pid = $rw["patient"];
                                                 $hd = $rw["hospital"];
                                                 $document = $rw["document"];
-                                                $sql2 = mysqli_query($con,"SELECT * FROM patient WHERE patient_id ='{$pid}'");
+                                                //select all from patient where the patient id is
+                                                // same as patient_id in record table 
+                                                // on same row(s) where hospital in session is found
+                                                $sql2 = mysqli_query($con,"SELECT * FROM patient WHERE patient_id = $pid ");
                                                 while ($w=mysqli_fetch_array($sql2)) {
                                                     $pfname = $w["fname"];
                                                     $plname = $w["lname"];
                                                 }
+                                                $allData[] = [
+                                                    $id, $auth, $pid, $document, $pfname, $plname
+                                                ];
+                                                // var_dump($allData);
                                             }
-                                            // $alldata[] = [
-                                            //     $id, $auth, $pid, $document, $pfname, $plname
-                                            // ];
-                                            // var_dump($alldata);
+                                            
                                         ?>
+                                            <?php
+                                            foreach ($allData as $all) {?> 
                                             <tr>
-                                                <td><?php echo $pfname.' '.$plname; ?></td>
-                                                <td><?php echo $document;?></td>
+                                                <td><?php echo $all[4].' '.$all[5]; ?></td>
+                                                <td><?php echo $all[3];?></td>
                                                 <td>
                                                     <div class="d-flex">
-														<a href="#" class="btn btn-primary showRecord shadow sharp mr-1" id="<?php echo $id?>"><i class="fa fa-eye"></i></a>
+														<a href="#" class="btn btn-primary showRecord shadow sharp mr-1" id="<?php echo $all[0]?>"><i class="fa fa-eye"></i></a>
                                                     </div>
                                                 </td>
                                                 <td>
                                                     <div class="d-flex">
-                                                        <a onclick="return confirm('Are you sure you want to delete this user?')" href="delete-record.php?del=<?php echo $id;?>" class="btn btn-danger shadow sharp"><i class="fa fa-trash"></i></a>
+                                                        <a onclick="return confirm('Are you sure you want to delete this user?')" href="delete-record.php?del=<?php echo $all[0];?>" class="btn btn-danger shadow sharp"><i class="fa fa-trash"></i></a>
                                                     </div>
                                                 </td>
                                             </tr>
-                                       
+                                            <?php } ?>
                                         <?php
                                         } ?>
                                         </tbody>
