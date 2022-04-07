@@ -18,16 +18,19 @@ require 'vendor/autoload.php';
 include('includes/db.php');
 $msg="";
 if(isset($_POST['submit']))
+//if the create user button is submitted
   {
     $email = mysqli_real_escape_string($con, $_POST['email']);
     $category = mysqli_real_escape_string($con, $_POST['category']);
     $password = mysqli_real_escape_string($con, md5($_POST['pass']));
-    $cpass = mysqli_real_escape_string($con, md5($_POST['pass2']));
-    $token = mysqli_real_escape_string($con, md5(rand()));
+    $cpass = mysqli_real_escape_string($con, md5($_POST['pass2'])); // encrypt password
+    $token = mysqli_real_escape_string($con, md5(rand())); // encrypt password
     $status = "Pending";
+    //check if the user already exists
     if (mysqli_num_rows(mysqli_query($con, "SELECT * FROM users WHERE email='{$email}'")) > 0) {
         $msg = "<div class='alert alert-danger'>{$email} - This Email address already exists</div>";
     }else{
+        //if user doesn't exist and both passwords match
         if ($password === $cpass) {
            $sql = "INSERT INTO users(email, category, password, token, status) VALUES ('{$email}', '{$category}', '{$password}', '{$token}', '{$status}') ";
            $result = mysqli_query($con, $sql);
@@ -42,13 +45,13 @@ if(isset($_POST['submit']))
                 $mail->isSMTP();                                            //Send using SMTP
                 $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
                 $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-                $mail->Username   = 'shegstix64@gmail.com';                     //SMTP username
+                $mail->Username   = 'youremail@mail.com';                     //SMTP username
                 $mail->Password   = '******';                               //SMTP password
                 $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
                 $mail->Port       = 587;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
                 //Recipients
-                $mail->setFrom('shegstix64@gmail.com');
+                $mail->setFrom('youremail@mail.com');
                 $mail->addAddress($email);
 
 
@@ -67,6 +70,7 @@ if(isset($_POST['submit']))
             $msg = "<div class='alert alert-danger'>Something Went Wrong!</div>";
            }
         }else{
+            // if user doesn't exist but passwords don't match
             $msg = "<div class='alert alert-danger'>Passwords do not match</div>";
         }
     }

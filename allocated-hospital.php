@@ -1,13 +1,13 @@
-<?php include("template/header.php") ?>
+<?php include("template/header.php") ///include header file ?>
 <?php 
 
     session_start();
     if (!isset($_SESSION["SESSION_EMAIL"])) {
-        header("location: index.php");
+        header("location: index.php");//if session hasn't started, user will be redirected to index page
         die();
     }
     include('includes/db.php');
-    $query = mysqli_query($con, "SELECT * FROM users WHERE email='{$_SESSION['SESSION_EMAIL']}'");
+    $query = mysqli_query($con, "SELECT * FROM users WHERE email='{$_SESSION['SESSION_EMAIL']}'");//selectin exact user whose session has started
     if (mysqli_num_rows($query)>0) {
         $row = mysqli_fetch_assoc($query);
     }
@@ -18,7 +18,7 @@
         $info = $row['info'];
         ?>
     <?php
-        if ($info == "1") {
+        if ($info == "1") { //if user info is 1, it'll display the following
     ?>
 <body>
 
@@ -68,17 +68,17 @@
                                         <tbody>
                                         <?php 
                                         include('includes/db.php');
-                                        $sql = mysqli_query($con,"SELECT * FROM patient WHERE email = '{$_SESSION["SESSION_EMAIL"]}'");
+                                        $sql = mysqli_query($con,"SELECT * FROM patient WHERE email = '{$_SESSION["SESSION_EMAIL"]}'"); //selecting exact patient whose session has started from patient table
                                         //   var_dump($sql);
                                         while ($row=mysqli_fetch_array($sql)) {
                                             $pid = $row["patient_id"];
                                             // $p = $row['patient'];
                                             // $h = $row['hospital'];
-                                            $sql1 = mysqli_query($con,"SELECT * FROM allocation WHERE patient ='{$pid}'");
+                                            $sql1 = mysqli_query($con,"SELECT * FROM allocation WHERE patient ='{$pid}'"); //select all from allocation where the patient id there is same as that of the patient whose session is set
                                             while ($rw=mysqli_fetch_array($sql1)) {
                                                 $h = $rw["hospital"];
                                             }  
-                                            @$sql2 = mysqli_query($con,"SELECT * FROM hospital WHERE hospital_id ='{$h}'");
+                                            @$sql2 = mysqli_query($con,"SELECT * FROM hospital WHERE hospital_id ='{$h}'"); // select exact hospital from hospital table whose hospital id is present in allocation table
                                             while ($w=mysqli_fetch_array($sql2)) {
                                                 $id = $w["id"];
                                                 $hname = $w["name"];
@@ -167,6 +167,7 @@
     <?php include("template/script.php") ?>
     <script>
         $(document).ready(function(){
+            //ajax script to display full info about the exact hospital a patient is allocated to
             $('.showHospital').click(function(){
                 var showHospital = $(this).attr("id");
 
@@ -227,7 +228,7 @@
 <?php
     }else{
         header("location:patient-profile.php");
-        exit();
+        exit();//if info is 0, it redirects the patient back to profile page
     }
 ?>
 <?php

@@ -1,13 +1,13 @@
-<?php include("template/header.php") ?>
+<?php include("template/header.php") //require header file ?>
 <?php
 
-session_start();
+session_start();//session starts
 if (!isset($_SESSION["SESSION_EMAIL2"])) {
-    header("location: index.php");
+    header("location: index.php"); //if the session has not started , user will be redirected back to index page
     die();
 }
-include('includes/db.php');
-$query = mysqli_query($con, "SELECT * FROM users WHERE email='{$_SESSION['SESSION_EMAIL2']}'");
+include('includes/db.php');//require database file
+$query = mysqli_query($con, "SELECT * FROM users WHERE email='{$_SESSION['SESSION_EMAIL2']}'");//selecting the exact user whose session has started
 if (mysqli_num_rows($query)>0) {
     $row = mysqli_fetch_assoc($query);
 }
@@ -52,17 +52,18 @@ if (mysqli_num_rows($query)>0) {
                                                 <h6 class="mb-0">Email</h6>
                                             </div>
                                             <div class="col-sm-9 text-black">
-                                                <?php echo $_SESSION["SESSION_EMAIL2"]?>
+                                                <?php echo $_SESSION["SESSION_EMAIL2"] // display user email address?>
                                             </div>
                                         </div><hr>
                                         <?php
+                                            // script to handle the update user password
                                             include('includes/db.php');
                                             $msg="";
                                             if (isset($_POST['submit'])) {
                                                 $current = mysqli_real_escape_string($con, md5($_POST['current']));
                                                 $password = mysqli_real_escape_string($con, md5($_POST['pass']));
                                                 $cpass = mysqli_real_escape_string($con, md5($_POST['pass2']));
-                                                $sql = "SELECT * FROM users WHERE email='{$_SESSION["SESSION_EMAIL2"]}' AND password='{$current}'";
+                                                $sql = "SELECT * FROM users WHERE email='{$_SESSION["SESSION_EMAIL2"]}' AND password='{$current}'";//script to verify if current password is correct
                                                 $result = mysqli_query($con, $sql);
                                                 if (mysqli_num_rows($result)==1) {
                                                 $row = mysqli_fetch_assoc($result);

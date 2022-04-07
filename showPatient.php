@@ -1,5 +1,6 @@
 <?php
 if (isset($_POST["showPatient"])) {
+    // show full patient info
     include('includes/db.php');
     $output = '';
     $showPatient = $_POST['showPatient'];

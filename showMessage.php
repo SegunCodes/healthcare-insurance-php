@@ -1,5 +1,6 @@
 <?php
 if (isset($_POST["showMessage"])) {
+    // show full message status
     include('includes/db.php');
     $output = '';
     $showMessage = $_POST['showMessage'];

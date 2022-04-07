@@ -1,5 +1,6 @@
 <?php include("template/header.php") ?>
 <?php 
+// php mailer to handle mail delivery
 //Import PHPMailer classes into the global namespace
 //These must be at the top of your script, not inside a function
 use PHPMailer\PHPMailer\PHPMailer;
@@ -26,6 +27,7 @@ if(isset($_POST['submit']))
     $token = mysqli_real_escape_string($con, md5(rand()));
     $status = "Pending";
     if (mysqli_num_rows(mysqli_query($con, "SELECT * FROM users WHERE email='{$email}'")) > 0) {
+        // check if email already exists
         $msg = "<div class='alert alert-danger'>{$email} - This Email address already exists</div>";
     }else{
         if ($password === $cpass) {
@@ -42,13 +44,13 @@ if(isset($_POST['submit']))
                 $mail->isSMTP();                                            //Send using SMTP
                 $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
                 $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-                $mail->Username   = 'shegstix64@gmail.com';                     //SMTP username
-                $mail->Password   = 'makanjuola';                               //SMTP password
+                $mail->Username   = 'youremail@mail.com';                     //SMTP username
+                $mail->Password   = '******';                               //SMTP password
                 $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
                 $mail->Port       = 587;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
                 //Recipients
-                $mail->setFrom('shegstix64@gmail.com');
+                $mail->setFrom('youremail@mail.com');
                 $mail->addAddress($email);
 
 

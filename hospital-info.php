@@ -1,29 +1,29 @@
-<?php include("template/header.php") ?>
+<?php include("template/header.php") //include header file?>
 <?php
 
-session_start();
+session_start(); // session start
 if (!isset($_SESSION["SESSION_EMAIL2"])) {
-    header("location: index.php");
+    header("location: index.php"); // if session isn't set, user is redirected to index page
     die();
 }
 include('includes/db.php');
-$query = mysqli_query($con, "SELECT * FROM users WHERE email='{$_SESSION['SESSION_EMAIL2']}'");
+$query = mysqli_query($con, "SELECT * FROM users WHERE email='{$_SESSION['SESSION_EMAIL2']}'");//select exact user from database whose session has begun
 if (mysqli_num_rows($query)>0) {
     $row = mysqli_fetch_assoc($query);
 }
 ?>
 <body>
 
-    <?php include("template/preloader.php") ?>
+    <?php include("template/preloader.php") //load preloader?>
 
     <!--**********************************
         Main wrapper start
     ***********************************-->
     <div id="main-wrapper">
 
-        <?php include "template/admin-header.php"; ?>
+        <?php include "template/admin-header.php"; //load admin header?>
 
-        <?php include "template/admin-sidebar.php"; ?>
+        <?php include "template/admin-sidebar.php"; // load admin sidebar?>
         
         <!--**********************************
             Content body start
@@ -59,8 +59,9 @@ if (mysqli_num_rows($query)>0) {
                                         <tbody>
                                         <?php 
                                         include('includes/db.php');
-                                        $sql = mysqli_query($con,"SELECT * FROM hospital ");
+                                        $sql = mysqli_query($con,"SELECT * FROM hospital "); //select * from hospital
                                         while ($row=mysqli_fetch_array($sql)) {
+                                            //selecting each row in hospital table
                                             $id = $row['id'];
                                             $name = $row['name'];
                                             $email = $row['email'];
@@ -93,8 +94,10 @@ if (mysqli_num_rows($query)>0) {
                                                     <a onclick="return confirm('Are you sure you want to delete this Hospital Info?')" href="delete-hospital.php?del=<?php echo $id;?>" class="btn btn-danger shadow btn-xs sharp"><i class="fa fa-trash"></i></a>
                                                     <?php
                                                       if ($status !== 'Approved') {
+                                                          //if status is approved, display this
                                                         echo '<a href="approve-hospital.php?appr='.$email.'" class="btn btn-xs mr-1 shadow btn-primary">Approve Hospital</a>';
                                                       }else{
+                                                          //if status isn't approved, display this
                                                         echo '<a href="disapprove-hospital.php?dis='.$email.'" class="btn btn-xs mr-1 shadow btn-warning">Disapprove Hospital</a>';
                                                       }
                                                     ?>
@@ -164,6 +167,7 @@ if (mysqli_num_rows($query)>0) {
     <?php include("template/script.php") ?>
     <script>
         $(document).ready(function(){
+            // ajax script to view full hospital info
             $('.showHospital').click(function(){
                 var showHospital = $(this).attr("id");
 

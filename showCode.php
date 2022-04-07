@@ -1,5 +1,6 @@
 <?php
 if (isset($_POST["showCode"])) {
+    // show form to enter auth code
     include('includes/db.php');
     $output = '';
     $showCode = $_POST['showCode'];

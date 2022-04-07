@@ -1,29 +1,30 @@
 <?php include("template/header.php") ?>
+<?php include("template/header.php") //include header file?>
 <?php
 
-session_start();
+session_start(); // session start
 if (!isset($_SESSION["SESSION_EMAIL2"])) {
-    header("location: index.php");
+    header("location: index.php"); // if session isn't set, user is redirected to index page
     die();
 }
 include('includes/db.php');
-$query = mysqli_query($con, "SELECT * FROM users WHERE email='{$_SESSION['SESSION_EMAIL2']}'");
+$query = mysqli_query($con, "SELECT * FROM users WHERE email='{$_SESSION['SESSION_EMAIL2']}'");//select exact user from database whose session has begun
 if (mysqli_num_rows($query)>0) {
     $row = mysqli_fetch_assoc($query);
 }
 ?>
 <body>
 
-    <?php include("template/preloader.php") ?>
+    <?php include("template/preloader.php") //load preloader?>
 
     <!--**********************************
         Main wrapper start
     ***********************************-->
     <div id="main-wrapper">
 
-        <?php include "template/admin-header.php"; ?>
+        <?php include "template/admin-header.php"; //load admin header?>
 
-        <?php include "template/admin-sidebar.php"; ?>
+        <?php include "template/admin-sidebar.php"; // load admin sidebar?>
         
         <!--**********************************
             Content body start
@@ -57,19 +58,19 @@ if (mysqli_num_rows($query)>0) {
                                         <tbody>
                                         <?php 
                                         include('includes/db.php');
-                                        $sql = mysqli_query($con,"SELECT * FROM authorization");
+                                        $sql = mysqli_query($con,"SELECT * FROM authorization"); //select all from authorization table
                                         while ($row=mysqli_fetch_array($sql)) {
                                             $id = $row["id"];
                                             $hid = $row['hospital_id'];
                                             $pid = $row['patient_id'];
                                             $status = $row['status'];
                                             $auth = $row['auth_code'];
-                                            $sql2 = mysqli_query($con,"SELECT * FROM patient WHERE patient_id ='{$pid}'");
+                                            $sql2 = mysqli_query($con,"SELECT * FROM patient WHERE patient_id ='{$pid}'"); // selecting full name of patient whose patient-id is located in authorization table from patient table 
                                             while ($w=mysqli_fetch_array($sql2)) {
                                                 $pfname = $w["fname"];
                                                 $plname = $w["lname"];
                                             }
-                                            $sql1 = mysqli_query($con,"SELECT * FROM hospital WHERE hospital_id ='{$hid}'");
+                                            $sql1 = mysqli_query($con,"SELECT * FROM hospital WHERE hospital_id ='{$hid}'"); //selecting hospital name of hospital whose h.id is in authorization table
                                             while ($rw=mysqli_fetch_array($sql1)) {
                                                 $hname = $rw["name"];
                                                 $hmail = $rw["email"];
@@ -78,17 +79,18 @@ if (mysqli_num_rows($query)>0) {
                                         ?>
                                         <?php
                                             include('includes/db.php');
+                                            //script to handle authorization code generation
                                             if (isset($_POST["submit"])) {
                                                 $id = mysqli_real_escape_string($con, $_POST['id']);
-                                                $sql = "SELECT * FROM authorization WHERE id='{$id}'";
+                                                $sql = "SELECT * FROM authorization WHERE id='{$id}'"; //select all from authorization
                                                 $result = mysqli_query($con, $sql);
                                                 if ($result) {
-                                                    $random_id = mt_rand(10000,99999);
+                                                    $random_id = mt_rand(10000,99999); // generate unique authorization code
                                                     $insert = mysqli_query($con, "UPDATE authorization SET auth_code = '$random_id' WHERE id = '$id'");
                                                     if ($insert) {
                                                         $to = $hmail;
                                                         $subject = "Authorization Code";
-                                                        $message =  "The Authorization Code for Patient with name: $pfname $plname is $random_id";
+                                                        $message =  "The Authorization Code for Patient with name: $pfname $plname is $random_id"; //php mailer to handle mail sending
                                                         $headers =  'MIME-Version: 1.0' . "\r\n"; 
                                                         $headers .= "$hmail" . "\r\n";
                                                         if(mail($to, $subject,$message,$headers)){ 
@@ -101,11 +103,12 @@ if (mysqli_num_rows($query)>0) {
                                                 }
                                                 
                                             }elseif(isset($_POST["close"])){
+                                                //if an authorization button is closed
                                                 $id2 = mysqli_real_escape_string($con, $_POST['id']);
                                                 $sql2 = "SELECT * FROM authorization WHERE id='{$id}'";
                                                 $result2 = mysqli_query($con, $sql2);
                                                 if ($result2) {
-                                                    $update = mysqli_query($con, "UPDATE allocation SET medic_record = 'close' WHERE patient = $pid");
+                                                    $update = mysqli_query($con, "UPDATE allocation SET medic_record = 'close' WHERE patient = $pid"); //close the medical record
                                                     $update2 = mysqli_query($con, "UPDATE authorization SET status = '0' WHERE id = '$id'");
                                                     if ($update2) {
                                                         echo "<script>alert('This Record is Closed')</script>";

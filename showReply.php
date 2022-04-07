@@ -1,6 +1,7 @@
 
 <?php
 if (isset($_POST["showReply"])) {
+    // show reply form for admin to reply messages
     include('includes/db.php');
     $output = '';
     $showReply = $_POST['showReply'];

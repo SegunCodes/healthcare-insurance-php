@@ -49,14 +49,14 @@
                     </li>
                     <li class="nav-item dropdown header-profile">
                     <?php 
-                        include('includes/db.php');
-                        $sql = mysqli_query($con,"SELECT * FROM patient WHERE email = '{$_SESSION["SESSION_EMAIL"]}'");
+                        include('includes/db.php');// require database connection file
+                        $sql = mysqli_query($con,"SELECT * FROM patient WHERE email = '{$_SESSION["SESSION_EMAIL"]}'");//query patient session by email
                         while ($row=mysqli_fetch_array($sql)) {
                             ?>
                         <a class="nav-link" href="javascript:void(0)" role="button" data-toggle="dropdown">
-                            <img src="images/profile/17.jpg" width="20" alt=""/>
+                            <!-- <img src="images/profile/17.jpg" width="20" alt=""/> -->
                             <div class="header-info">
-                                <span class="text-black"><strong><?php echo $row["fname"]. ' '; echo $row["lname"] ?></strong></span>
+                                <span class="text-black"><strong><?php echo $row["fname"]. ' '; echo $row["lname"] //display patient full name?></strong></span>
                             </div>
                         </a>
                         <?php

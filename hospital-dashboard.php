@@ -1,13 +1,13 @@
-<?php include("template/header.php") ?>
+<?php include("template/header.php") //include header file?>
 <?php
 
-session_start();
+session_start(); // session start
 if (!isset($_SESSION["SESSION_EMAIL1"])) {
-    header("location: index.php");
+    header("location: index.php");  // if session isn't set, user is redirected to index page
     die();
 }
 include('includes/db.php');
-$query = mysqli_query($con, "SELECT * FROM users WHERE email='{$_SESSION['SESSION_EMAIL1']}'");
+$query = mysqli_query($con, "SELECT * FROM users WHERE email='{$_SESSION['SESSION_EMAIL1']}'"); //select exact user from database whose session has begun
 if (mysqli_num_rows($query)>0) {
     $row = mysqli_fetch_assoc($query);
 }
@@ -18,7 +18,7 @@ if (mysqli_num_rows($query)>0) {
       $info = $row['info'];
       ?>
       <?php
-        if ($info == "1") {
+        if ($info == "1") { // if info is 1 display the following
         ?>
 <body>
 
@@ -212,7 +212,7 @@ if (mysqli_num_rows($query)>0) {
 	</script>
 </body>
 <?php
-    }else{
+    }else{ //if info is 0, display this
 		?>
 	<body>
 
@@ -245,6 +245,7 @@ if (mysqli_num_rows($query)>0) {
 										<div class="card-body">
 											<div class="basic-form">
 												<?php
+													// script to validate hospital_id
 													include('includes/db.php');
 													$msg="";
 													if (isset($_POST["submit"])) {
@@ -254,8 +255,7 @@ if (mysqli_num_rows($query)>0) {
 													
 														if (mysqli_num_rows($result)===1) {
 															$row = mysqli_fetch_assoc($result);
-															// $_SESSION["HID"] = $pid;
-															if ($row) {
+															if ($row) { // if hospital id is correct update info == 1
 																$approve = mysqli_query($con, "UPDATE users SET `info` = '1' WHERE email = '{$_SESSION['SESSION_EMAIL1']}'");
 																echo "<script>window.location='hospital-dashboard.php'</script>";
 															}

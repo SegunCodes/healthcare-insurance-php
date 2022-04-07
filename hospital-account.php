@@ -1,13 +1,13 @@
-<?php include("template/header.php") ?>
+<?php include("template/header.php") //include header file?>
 <?php
 
-session_start();
+session_start(); // session start
 if (!isset($_SESSION["SESSION_EMAIL1"])) {
-    header("location: index.php");
+    header("location: index.php");  // if session isn't set, user is redirected to index page
     die();
 }
 include('includes/db.php');
-$query = mysqli_query($con, "SELECT * FROM users WHERE email='{$_SESSION['SESSION_EMAIL1']}'");
+$query = mysqli_query($con, "SELECT * FROM users WHERE email='{$_SESSION['SESSION_EMAIL1']}'"); //select exact user from database whose session has begun
 if (mysqli_num_rows($query)>0) {
     $row = mysqli_fetch_assoc($query);
 }
@@ -15,16 +15,16 @@ if (mysqli_num_rows($query)>0) {
 
 <body>
 
-    <?php include("template/preloader.php") ?>
+    <?php include("template/preloader.php") //load preloader?>
 
     <!--**********************************
         Main wrapper start
     ***********************************-->
     <div id="main-wrapper">
 
-    <?php include "template/hospital-header.php"; ?>
+    <?php include "template/hospital-header.php"; //load hospital header?>
 
-    <?php include "template/hospital-sidebar.php"; ?>
+    <?php include "template/hospital-sidebar.php"; //load hospital sidebar?>
 		
 		<!--**********************************
             Content body start
@@ -64,6 +64,7 @@ if (mysqli_num_rows($query)>0) {
                                   </div>
                                   <hr>
                                   <?php
+                                  //script to handle user change password
                                     include('includes/db.php');
                                     $msg="";
                                     if (isset($_POST['submit'])) {
@@ -72,7 +73,7 @@ if (mysqli_num_rows($query)>0) {
                                         $cpass = mysqli_real_escape_string($con, md5($_POST['pass2']));
                                         $sql = "SELECT * FROM users WHERE email='{$_SESSION["SESSION_EMAIL1"]}' AND password='{$current}'";
                                         $result = mysqli_query($con, $sql);
-                                        if (mysqli_num_rows($result)==1) {
+                                        if (mysqli_num_rows($result)==1) { // check if the current password user entered is valid
                                           $row = mysqli_fetch_assoc($result);
                                           if ($password === $cpass) {
                                               $query = mysqli_query($con, "UPDATE users SET password='{$password}' WHERE email='{$_SESSION["SESSION_EMAIL1"]}'");

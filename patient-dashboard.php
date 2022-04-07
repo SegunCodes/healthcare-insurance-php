@@ -1,15 +1,15 @@
-<?php include("template/header.php") ?>
+<?php include("template/header.php") //include header file?>
 <?php 
-session_start();
-if (!isset($_SESSION["SESSION_EMAIL"])) {
-	header("location: index.php");
-	die();
-}
-include('includes/db.php');
-$query = mysqli_query($con, "SELECT * FROM users WHERE email='{$_SESSION['SESSION_EMAIL']}'");
-if (mysqli_num_rows($query)>0) {
-	$row = mysqli_fetch_assoc($query);
-}
+    session_start();// session start
+    if (!isset($_SESSION["SESSION_EMAIL"])) {
+        header("location: index.php");// if session isn't set, user is redirected to index page
+        die();
+    }
+    include('includes/db.php');
+    $query = mysqli_query($con, "SELECT * FROM users WHERE email='{$_SESSION['SESSION_EMAIL']}'"); //select exact user from database whose session has begun
+    if (mysqli_num_rows($query)>0) {
+        $row = mysqli_fetch_assoc($query);
+    }
 ?>
 <?php
     $sql = mysqli_query($con,"SELECT * FROM users WHERE email = '{$_SESSION["SESSION_EMAIL"]}'");
@@ -17,20 +17,20 @@ if (mysqli_num_rows($query)>0) {
         $info = $row['info'];
         ?>
     <?php
-        if ($info == "1") {
+        if ($info == "1") { //if user info is 1, display this....
     ?>
 <body>
 
-    <?php include("template/preloader.php") ?>
+	<?php include("template/preloader.php") //load preloader?>
 
-    <!--**********************************
-        Main wrapper start
-    ***********************************-->
-    <div id="main-wrapper">
+	<!--**********************************
+		Main wrapper start
+	***********************************-->
+	<div id="main-wrapper">
 
-    <?php include "template/patient-header.php"; ?>
+		<?php include "template/patient-header.php"; //load patient header?>
 
-    <?php include "template/patient-sidebar.php"; ?>
+		<?php include "template/patient-sidebar.php"; //load patient sidebar?>
         
 		
 		<!--**********************************
@@ -162,7 +162,7 @@ if (mysqli_num_rows($query)>0) {
 	</script>
 </body>
 <?php
-    }else{
+    }else{ //if info is 0 display this
 		?>
 	<body>
 
@@ -195,6 +195,7 @@ if (mysqli_num_rows($query)>0) {
 										<div class="card-body">
 											<div class="basic-form">
 												<?php
+													// script to validate patient_id
 													include('includes/db.php');
 													$msg="";
 													if (isset($_POST["submit"])) {
@@ -204,7 +205,7 @@ if (mysqli_num_rows($query)>0) {
 													
 														if (mysqli_num_rows($result)===1) {
 															$row = mysqli_fetch_assoc($result);
-															if ($row) {
+															if ($row) { // if patient_id is correct update info == 1
 																$approve = mysqli_query($con, "UPDATE users SET `info` = '1' WHERE email = '{$_SESSION['SESSION_EMAIL']}'");
 																echo "<script>window.location='patient-dashboard.php'</script>";
 															}

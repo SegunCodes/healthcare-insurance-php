@@ -1,29 +1,29 @@
-<?php include("template/header.php") ?>
+<?php include("template/header.php") //include header file?>
 <?php
 
-session_start();
+session_start(); // session start
 if (!isset($_SESSION["SESSION_EMAIL2"])) {
-    header("location: index.php");
+    header("location: index.php"); // if session isn't set, user is redirected to index page
     die();
 }
 include('includes/db.php');
-$query = mysqli_query($con, "SELECT * FROM users WHERE email='{$_SESSION['SESSION_EMAIL2']}'");
+$query = mysqli_query($con, "SELECT * FROM users WHERE email='{$_SESSION['SESSION_EMAIL2']}'");//select exact user from database whose session has begun
 if (mysqli_num_rows($query)>0) {
     $row = mysqli_fetch_assoc($query);
 }
 ?>
 <body>
 
-    <?php include("template/preloader.php") ?>
+    <?php include("template/preloader.php") //load preloader?>
 
     <!--**********************************
         Main wrapper start
     ***********************************-->
     <div id="main-wrapper">
 
-        <?php include "template/admin-header.php"; ?>
+        <?php include "template/admin-header.php"; //load admin header?>
 
-        <?php include "template/admin-sidebar.php"; ?>
+        <?php include "template/admin-sidebar.php"; // load admin sidebar?>
         
         <!--**********************************
             Content body start
@@ -55,17 +55,17 @@ if (mysqli_num_rows($query)>0) {
                                         <tbody>
                                         <?php 
                                         include('includes/db.php');
-                                        $sql = mysqli_query($con,"SELECT * FROM allocation");
+                                        $sql = mysqli_query($con,"SELECT * FROM allocation"); // selecting all from allocation table
                                         while ($row=mysqli_fetch_array($sql)) {
                                             $id = $row["id"];
                                             $p = $row['patient'];
                                             $h = $row['hospital'];  
-                                            $sql2 = mysqli_query($con,"SELECT * FROM patient WHERE patient_id ='{$p}'");
+                                            $sql2 = mysqli_query($con,"SELECT * FROM patient WHERE patient_id ='{$p}'"); //selecting the name of patient from patient table whose patient_id is located in allocation table
                                             while ($w=mysqli_fetch_array($sql2)) {
                                                 $pfname = $w["fname"];
                                                 $plname = $w["lname"];
                                             }
-                                            $sql1 = mysqli_query($con,"SELECT name FROM hospital WHERE hospital_id ='{$h}'");
+                                            $sql1 = mysqli_query($con,"SELECT name FROM hospital WHERE hospital_id ='{$h}'"); //selecting the hospital name whose hospital id is present in allocation table
                                             while ($rw=mysqli_fetch_array($sql1)) {
                                                 $hname = $rw["name"];
                                             }

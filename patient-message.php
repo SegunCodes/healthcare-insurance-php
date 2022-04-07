@@ -1,13 +1,12 @@
-<?php include("template/header.php") ?>
+<?php include("template/header.php") //include header file?>
 <?php 
-
-    session_start();
+    session_start();// session start
     if (!isset($_SESSION["SESSION_EMAIL"])) {
-        header("location: index.php");
+        header("location: index.php");// if session isn't set, user is redirected to index page
         die();
     }
     include('includes/db.php');
-    $query = mysqli_query($con, "SELECT * FROM users WHERE email='{$_SESSION['SESSION_EMAIL']}'");
+    $query = mysqli_query($con, "SELECT * FROM users WHERE email='{$_SESSION['SESSION_EMAIL']}'"); //select exact user from database whose session has begun
     if (mysqli_num_rows($query)>0) {
         $row = mysqli_fetch_assoc($query);
     }
@@ -18,20 +17,20 @@
         $info = $row['info'];
         ?>
     <?php
-        if ($info == "1") {
+        if ($info == "1") { //if user info is 1, display this....
     ?>
 <body>
 
-    <?php include("template/preloader.php") ?>
+	<?php include("template/preloader.php") //load preloader?>
 
-    <!--**********************************
-        Main wrapper start
-    ***********************************-->
-    <div id="main-wrapper">
+	<!--**********************************
+		Main wrapper start
+	***********************************-->
+	<div id="main-wrapper">
 
-    <?php include "template/patient-header.php"; ?>
+		<?php include "template/patient-header.php"; //load patient header?>
 
-    <?php include "template/patient-sidebar.php"; ?>
+		<?php include "template/patient-sidebar.php"; //load patient sidebar?>
 		
 		<!--**********************************
             Content body start
@@ -51,21 +50,22 @@
                                     </div>
                                     <div class="compose-content">
                                         <?php
+                                            // script to handle user send message
                                             include('includes/db.php');
                                             $msg="";
                                             if (isset($_POST["submit"])) {
                                                 $email = mysqli_real_escape_string($con, $_POST['email']);
                                                 $subject = mysqli_real_escape_string($con, $_POST['subject']);
                                                 $message = mysqli_real_escape_string($con, $_POST['message']);
-                                                $status = "Pending";
+                                                $status = "Pending";//default status of message
                                                 $filename = $_FILES['file']['name'];
                                                 $tempname = $_FILES['file']['tmp_name'];
                                                 $folder = 'includes/images/'.$filename;
-                                                $move = move_uploaded_file($tempname, $folder);
+                                                $move = move_uploaded_file($tempname, $folder); // to handle saving of file uploaded by user
                                                 $sql = mysqli_query($con, "INSERT INTO messages(sender, subject, message, file, status)
                                                 VALUES ('{$email}', '{$subject}', '{$message}', '{$filename}', '{$status}')");
                                                 if ($sql) {
-                                                    $to = "shegstix64@gmail.com";
+                                                    $to = "youremail@mail.com";
                                                     $subject = "New Message Request";
                                                     $message =  "A new message awaits your response";
                                                     $headers =  'MIME-Version: 1.0' . "\r\n"; 

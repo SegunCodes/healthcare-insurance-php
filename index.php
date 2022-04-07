@@ -1,5 +1,6 @@
 <?php include("template/header.php") ?>
 <?php
+// check if any of the session for given username is set
 session_start();
 if (isset($_SESSION["SESSION_EMAIL"])) {
     header("location: patient-profile.php");
@@ -10,9 +11,10 @@ if (isset($_SESSION["SESSION_EMAIL"])) {
 }
 include('includes/db.php');
 $msg="";
+// if there's a verification statement in url
 if (isset($_GET['verification'])) {
     if (mysqli_num_rows(mysqli_query($con, "SELECT * FROM users WHERE token='{$_GET['verification']}'"))>0) {
-        $query = mysqli_query($con, "UPDATE users set token='', status='Active' WHERE token= '{$_GET['verification']}'");
+        $query = mysqli_query($con, "UPDATE users set token='', status='Active' WHERE token= '{$_GET['verification']}'"); // activate account
         if ($query) {
             $msg = "<div class='alert alert-success'>Account Verification is completed! Now You can login!</div>";
         }
@@ -21,6 +23,7 @@ if (isset($_GET['verification'])) {
     }
 }
 if (isset($_POST["submit"])) {
+    // script to handle user login
     $email = mysqli_real_escape_string($con, $_POST["email"]);
     $password = mysqli_real_escape_string($con, md5($_POST["password"]));
 
@@ -28,6 +31,7 @@ if (isset($_POST["submit"])) {
     $result = mysqli_query($con, $sql);
 
     if (mysqli_num_rows($result)===1) {
+        // if correct details, redirect the email to its correct location based on user category
         $row = mysqli_fetch_assoc($result);
         if (empty($row["token"]) && $row["category"]==="Hospital") {
             $_SESSION["SESSION_EMAIL1"] = $email;
@@ -39,7 +43,7 @@ if (isset($_POST["submit"])) {
             $_SESSION["SESSION_EMAIL2"] = $email;
             header("location: admin-dashboard.php");
         }
-        else{
+        else{ // if a user enters index page without verifying account, sch user won't be allowed to proceed
             $msg = "<div class='alert alert-info'>First Verify Your Account and try again!</div>";
         }
     }else{

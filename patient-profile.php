@@ -1,30 +1,28 @@
-<?php include("template/header.php") ?>
+<?php include("template/header.php") //include header file?>
 <?php 
-
-session_start();
-if (!isset($_SESSION["SESSION_EMAIL"])) {
-    header("location: index.php");
-    die();
-}
-include('includes/db.php');
-$query = mysqli_query($con, "SELECT * FROM users WHERE email='{$_SESSION['SESSION_EMAIL']}'");
-if (mysqli_num_rows($query)>0) {
-    $row = mysqli_fetch_assoc($query);
-}
+    session_start();// session start
+    if (!isset($_SESSION["SESSION_EMAIL"])) {
+        header("location: index.php");// if session isn't set, user is redirected to index page
+        die();
+    }
+    include('includes/db.php');
+    $query = mysqli_query($con, "SELECT * FROM users WHERE email='{$_SESSION['SESSION_EMAIL']}'"); //select exact user from database whose session has begun
+    if (mysqli_num_rows($query)>0) {
+        $row = mysqli_fetch_assoc($query);
+    }
 ?>
 <body>
 
-    <?php include("template/preloader.php") ?>
-
+    <?php include("template/preloader.php") //load preloader?>
 
     <!--**********************************
         Main wrapper start
     ***********************************-->
     <div id="main-wrapper">
 
-        <?php include "template/patient-header.php"; ?>
-        
-        <?php include "template/patient-sidebar.php"; ?>
+        <?php include "template/patient-header.php"; //load patient header?>
+
+        <?php include "template/patient-sidebar.php"; //load patient sidebar?>
 
         <!--**********************************
             Content body start
@@ -49,23 +47,25 @@ if (mysqli_num_rows($query)>0) {
                                 <?php
                                     
                                     include('includes/db.php');
+                                    //php mailer to handle mail delivery
                                     use PHPMailer\PHPMailer\PHPMailer;
                                     use PHPMailer\PHPMailer\SMTP;
                                     use PHPMailer\PHPMailer\Exception;
                                     require 'vendor/autoload.php';
                                     $msg="";
                                     if (isset($_POST["submit"])) {
+                                        //script to handle submission of hospital profile
                                         $fname = mysqli_real_escape_string($con, $_POST['fname']);
                                         $lname = mysqli_real_escape_string($con, $_POST['lname']);
                                         $phone = mysqli_real_escape_string($con, $_POST['phone']);
                                         $email = mysqli_real_escape_string($con, $_POST['email']);
                                         $stat = mysqli_real_escape_string($con, $_POST['state']);
-                                        $state = mysqli_query($con,"SELECT name FROM states WHERE id = {$stat}");
+                                        $state = mysqli_query($con,"SELECT name FROM states WHERE id = {$stat}"); //selecting all states
                                         $rw=mysqli_fetch_array($state);
                                         $rw["name"];
                                         // var_dump($rw);
                                         $lg = mysqli_real_escape_string($con, $_POST['lga']);
-                                        $lga = mysqli_query($con, "SELECT name FROM local_governments WHERE id = {$lg}");
+                                        $lga = mysqli_query($con, "SELECT name FROM local_governments WHERE id = {$lg}");//selecting all local governments
                                         $w=mysqli_fetch_array($lga);
                                         $w["name"];
                                         // var_dump($w);
@@ -110,13 +110,13 @@ if (mysqli_num_rows($query)>0) {
                                                     $mail->isSMTP();                                            //Send using SMTP
                                                     $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
                                                     $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-                                                    $mail->Username   = 'shegstix64@gmail.com';                     //SMTP username
+                                                    $mail->Username   = 'youremail@mail.com';                     //SMTP username
                                                     $mail->Password   = '*****';                               //SMTP password
                                                     $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
                                                     $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
                                                     //Recipients
-                                                    $mail->setFrom('shegstix64@gmail.com');
+                                                    $mail->setFrom('youremail@mail.com');
                                                     $mail->addAddress($email);
 
 

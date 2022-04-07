@@ -1,13 +1,13 @@
-<?php include("template/header.php") ?>
+<?php include("template/header.php") //include header file?>
 <?php
 
-session_start();
+session_start(); // session start
 if (!isset($_SESSION["SESSION_EMAIL1"])) {
-    header("location: index.php");
+    header("location: index.php");  // if session isn't set, user is redirected to index page
     die();
 }
 include('includes/db.php');
-$query = mysqli_query($con, "SELECT * FROM users WHERE email='{$_SESSION['SESSION_EMAIL1']}'");
+$query = mysqli_query($con, "SELECT * FROM users WHERE email='{$_SESSION['SESSION_EMAIL1']}'"); //select exact user from database whose session has begun
 if (mysqli_num_rows($query)>0) {
     $row = mysqli_fetch_assoc($query);
 }
@@ -18,20 +18,20 @@ if (mysqli_num_rows($query)>0) {
       $info = $row['info'];
       ?>
       <?php
-        if ($info == "1") {
+        if ($info == "1") { // if info is 1, display this
         ?>
 <body>
 
-    <?php include("template/preloader.php") ?>
+    <?php include("template/preloader.php") //load preloader?>
 
     <!--**********************************
         Main wrapper start
     ***********************************-->
     <div id="main-wrapper">
 
-    <?php include "template/hospital-header.php"; ?>
+    <?php include "template/hospital-header.php"; //load hospital header?>
 
-    <?php include "template/hospital-sidebar.php"; ?>
+    <?php include "template/hospital-sidebar.php"; //load hospital sidebar?>
 		
 		<!--**********************************
             Content body start
@@ -67,20 +67,23 @@ if (mysqli_num_rows($query)>0) {
                                         
                                         <tbody>
                                         <?php 
+                                        //select allocated patient to hospital whose session is set
                                         $alldata=[];
                                         include('includes/db.php');
+                                        //selecting hospital whose session is set
                                         $sql = mysqli_query($con,"SELECT * FROM hospital WHERE email = '{$_SESSION["SESSION_EMAIL1"]}'");
                                     
                                         while ($row=mysqli_fetch_array($sql)) {
                                             $hid = $row["hospital_id"];
-                                            // $p = $row['patient'];
-                                            // $h = $row['hospital'//];
+                                            //select all from allocation where hospital_id is same as that of hospital in session
                                             $sql1 = mysqli_query($con,"SELECT * FROM allocation WHERE hospital = $hid ");
                                             
                                             while ($rw=mysqli_fetch_array($sql1)) {
                                                 $p = $rw["patient"];
                                                 $mr = $rw["medic_record"];
-
+                                                //select all from patient where the patient id is
+                                                // same as patient_id in allocation table 
+                                                // on same row(s) where hospital in session is found
                                                 $sql2 = mysqli_query($con,"SELECT * FROM patient WHERE patient_id = $p");
                                                 while ($w=mysqli_fetch_array($sql2)) {
                                                     $id = $w["id"];
@@ -110,12 +113,14 @@ if (mysqli_num_rows($query)>0) {
                                         ?>
                                         <?php
                                             include('includes/db.php');
+                                            //if open medical record button is clicked
                                             if (isset($_POST["submit"])) {
                                                 $h = mysqli_real_escape_string($con, $_POST['hid']);
                                                 $get = mysqli_real_escape_string($con, $_POST['get']);
                                                 $sql = "SELECT * FROM allocation WHERE patient='{$get}'";
                                                 $result = mysqli_query($con, $sql);
                                                 if ($result) {
+                                                    //set medic_record to open
                                                     $update = mysqli_query($con, "UPDATE allocation SET medic_record = 'open' WHERE patient = $get");
                                                     $insert = mysqli_query($con, "INSERT INTO authorization(hospital_id, patient_id)
                                                     VALUES ('{$h}', '{$get}')");
@@ -141,6 +146,7 @@ if (mysqli_num_rows($query)>0) {
 														<a href="#" class="btn btn-primary showPatient shadow sharp mr-1" id="<?php echo $all[0] ?>"><i class="fa fa-eye"></i></a>
                                                         <?php
                                                         if ($all[17] !== 'close') {
+                                                            //if medic_record is opnened, it'll display 'continue' rather than 'open medic....'
                                                             ?>
                                                             <a href="#" class="btn btn-success showCode" id="<?php echo $all[16]?>">Continue</a>
                                                             <?php
@@ -237,7 +243,7 @@ if (mysqli_num_rows($query)>0) {
     <script>
         $(document).ready(function(){
 
-            //auth code form
+            //ajax to display auth code form
             $('.showCode').click(function(){
                 var showCode = $(this).attr("id");
 
@@ -252,7 +258,7 @@ if (mysqli_num_rows($query)>0) {
                 })
                
             });
-
+            // ajax to display full patient info
             $('.showPatient').click(function(){
                 var showPatient = $(this).attr("id");
 

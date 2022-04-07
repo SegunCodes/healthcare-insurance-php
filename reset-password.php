@@ -1,16 +1,21 @@
 <?php include("template/header.php") ?>
 <?php
 session_start();
+//check if session has started on email
 if (isset($_SESSION["SESSION_EMAIL"])) {
     header("location: patient-profile.php");
     die();
 }elseif (isset($_SESSION["SESSION_EMAIL1"])) {
     header("location: hospital-profile.php");
     die();
+}elseif (isset($_SESSION["SESSION_EMAIL2"])) {
+    header("location: admin-dashboard.php");
+    die();
 }
 include('includes/db.php');
 $msg="";
 if (isset($_GET["reset"])) {
+    //check if the url link contains a reset statement and correct token
     if (mysqli_num_rows(mysqli_query($con, "SELECT * FROM users WHERE token='{$_GET['reset']}'")) > 0) {
         if (isset($_POST['submit'])) {
             $password = mysqli_real_escape_string($con, md5($_POST['pass']));
@@ -25,6 +30,7 @@ if (isset($_GET["reset"])) {
             }
         }
     }else{
+        // if link doesnt contain link or correct token
         $msg = "<div class='alert alert-danger'>Reset Link does not match</div>";
     }
 }else{

@@ -65,13 +65,13 @@
                     </li>
                     <li class="nav-item dropdown header-profile">
                     <?php 
-                        include('includes/db.php');
-                        $sql = mysqli_query($con,"SELECT * FROM hospital WHERE email = '{$_SESSION["SESSION_EMAIL1"]}'");
+                        include('includes/db.php'); // require database connection file
+                        $sql = mysqli_query($con,"SELECT * FROM hospital WHERE email = '{$_SESSION["SESSION_EMAIL1"]}'");//query hospital session by email
                         while ($row=mysqli_fetch_array($sql)) {
                             ?>
                         <a class="nav-link" href="javascript:void(0)" role="button" data-toggle="dropdown">
                             <div class="header-info">
-                                <span class="text-black"><strong><?php echo $row["name"] ?></strong></span>
+                                <span class="text-black"><strong><?php echo $row["name"] //display hospital name?></strong></span>
                             </div>
                         </a>
                         <?php

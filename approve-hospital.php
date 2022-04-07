@@ -1,12 +1,13 @@
 <?php
 include('includes/db.php');
+//php mailer to handle mail delivery when hospital is approved and sends to hospital
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 $email = $_GET['appr'];
-$random_id = mt_rand(1000,9999);
+$random_id = mt_rand(1000,9999); //generate unique hospital for hospiatl
 require 'vendor/autoload.php';
-$appr = mysqli_query($con, "UPDATE hospital SET `status` = 'Approved', `hospital_id` = '$random_id' WHERE email = '$email'");
+$appr = mysqli_query($con, "UPDATE hospital SET `status` = 'Approved', `hospital_id` = '$random_id' WHERE email = '$email'"); //update the hospital table
 
 if ($appr) {
 	 $mail = new PHPMailer(true);
@@ -17,13 +18,13 @@ if ($appr) {
 		 $mail->isSMTP();                                            //Send using SMTP
 		 $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
 		 $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-		 $mail->Username   = 'shegstix64@gmail.com';                     //SMTP username
+		 $mail->Username   = 'youremail@mail.com';                     //SMTP username
 		 $mail->Password   = '*****';                               //SMTP password
 		 $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
 		 $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
  
 		 //Recipients
-		 $mail->setFrom('shegstix64@gmail.com');
+		 $mail->setFrom('youremail@mail.com');
 		 $mail->addAddress($email);
  
  

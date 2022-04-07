@@ -1,13 +1,13 @@
-<?php include("template/header.php") ?>
+<?php include("template/header.php") //include header file?>
 <?php
 
-session_start();
+session_start(); // session start
 if (!isset($_SESSION["SESSION_EMAIL1"])) {
-    header("location: index.php");
+    header("location: index.php");  // if session isn't set, user is redirected to index page
     die();
 }
 include('includes/db.php');
-$query = mysqli_query($con, "SELECT * FROM users WHERE email='{$_SESSION['SESSION_EMAIL1']}'");
+$query = mysqli_query($con, "SELECT * FROM users WHERE email='{$_SESSION['SESSION_EMAIL1']}'"); //select exact user from database whose session has begun
 if (mysqli_num_rows($query)>0) {
     $row = mysqli_fetch_assoc($query);
 }
@@ -18,20 +18,20 @@ if (mysqli_num_rows($query)>0) {
       $info = $row['info'];
       ?>
       <?php
-        if ($info == "1") {
+        if ($info == "1") { //if user info == 1 display this
         ?>
 <body>
 
-    <?php include("template/preloader.php") ?>
+    <?php include("template/preloader.php") //load preloader?>
 
     <!--**********************************
         Main wrapper start
     ***********************************-->
     <div id="main-wrapper">
 
-    <?php include "template/hospital-header.php"; ?>
+        <?php include "template/hospital-header.php"; //load hospital header?>
 
-    <?php include "template/hospital-sidebar.php"; ?>
+        <?php include "template/hospital-sidebar.php"; //load hospital sidebar?>
 		
 		<!--**********************************
             Content body start
@@ -53,6 +53,7 @@ if (mysqli_num_rows($query)>0) {
                                         <?php
                                             include('includes/db.php');
                                             $msg = "";
+                                            // script to handle upload of medical reports
                                             if(isset($_POST['upload']))
                                                 {
                                                 $patient = mysqli_real_escape_string($con, $_POST['pname']);
@@ -60,6 +61,7 @@ if (mysqli_num_rows($query)>0) {
                                                 $document = mysqli_real_escape_string($con, $_POST['name']);
                                                 $hospital = mysqli_real_escape_string($con, $_POST['hospital']);
                                                 $date = date("Y/M/D h:i:a");
+                                                // numerous file insertion into database
                                                 $filecount = count($_FILES['file']['name']);
                                                 for ($i=0; $i < $filecount; $i++) { 
                                                     $filename = $_FILES['file']['name'][$i];
@@ -93,10 +95,6 @@ if (mysqli_num_rows($query)>0) {
                                                         <input type="file" multiple required name="file[]" class="form-control">
                                                     </div>
                                                 </div>
-                                                <!-- <div required class="form-group">
-                                                    <button class="btn btn-primary btn-sm" id="add">Add File</button>
-                                                    <button class="btn btn-sm btn-danger" id="remove">Remove File</button>
-                                                </div> -->
                                                 <div class="form-group">
                                                     <!-- <label class="mb-1"><strong>Auth Code</strong></label> -->
                                                     <input hidden type="text" name="code" value="<?php echo $_GET["auth"];?>" required class="form-control">
@@ -156,32 +154,6 @@ if (mysqli_num_rows($query)>0) {
 
     <?php include("template/script.php") ?>
     <script>
-        addNewRow();
-
-        $("#add").click(function(){
-            addNewRow();
-        })
-
-        function addNewRow(){
-            $.ajax({
-                url: "new_row.php",
-                method:"POST",
-                data:{getNewItem:1},
-                success:function(data){
-                    $("#file_item").append(data);
-                    var n = 0;
-                    $(".number").each(function(){
-                        $(this).html(++n);
-                    })
-                }
-            })
-        }
-
-        $("#remove").click(function(){
-            $("#file_item").children("tr:last").remove();
-        })
-    </script>
-    <script>
 		function carouselReview(){
 			/*  testimonial one function by = owl.carousel.js */
 			jQuery('.testimonial-one').owlCarousel({
@@ -224,8 +196,8 @@ if (mysqli_num_rows($query)>0) {
 </body>
 <?php
     }else{
-          header("location:hospital-profile.php");
-        exit();
+        header("location:hospital-profile.php");
+        exit(); // if info is 0, redirect to profile page
       }
   ?>
   <?php

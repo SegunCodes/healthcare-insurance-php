@@ -6,6 +6,7 @@ if (isset($_POST["submit"])) {
     $auth = mysqli_real_escape_string($con, $_POST["auth"]);
     $code = mysqli_real_escape_string($con, $_POST["code"]);
     if ($auth == $code) {
+        // verify if the code entered by user is same as the hidden code...
         echo "<script>window.location='medical.php?auth=$auth'</script>";       
     }else{
         echo "<script>alert('Incorrect Code')</script>"; 

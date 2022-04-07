@@ -1,16 +1,16 @@
-<?php include("template/header.php") ?>
-<?php 
+<?php include("template/header.php") //include header file?>
+<?php
 
-    session_start();
-    if (!isset($_SESSION["SESSION_EMAIL1"])) {
-        header("location: index.php");
-        die();
-    }
-    include('includes/db.php');
-    $query = mysqli_query($con, "SELECT * FROM users WHERE email='{$_SESSION['SESSION_EMAIL1']}'");
-    if (mysqli_num_rows($query)>0) {
-        $row = mysqli_fetch_assoc($query);
-    }
+session_start(); // session start
+if (!isset($_SESSION["SESSION_EMAIL1"])) {
+    header("location: index.php");  // if session isn't set, user is redirected to index page
+    die();
+}
+include('includes/db.php');
+$query = mysqli_query($con, "SELECT * FROM users WHERE email='{$_SESSION['SESSION_EMAIL1']}'"); //select exact user from database whose session has begun
+if (mysqli_num_rows($query)>0) {
+    $row = mysqli_fetch_assoc($query);
+}
 ?>
 <?php
   $sql = mysqli_query($con,"SELECT * FROM users WHERE email = '{$_SESSION["SESSION_EMAIL1"]}'");
@@ -18,20 +18,20 @@
       $info = $row['info'];
       ?>
       <?php
-        if ($info == "1") {
+        if ($info == "1") { // if info is 1, display this
         ?>
 <body>
 
-    <?php include("template/preloader.php") ?>
+    <?php include("template/preloader.php") //load preloader?>
 
     <!--**********************************
         Main wrapper start
     ***********************************-->
     <div id="main-wrapper">
 
-    <?php include "template/hospital-header.php"; ?>
+    <?php include "template/hospital-header.php"; //load hospital header?>
 
-    <?php include "template/hospital-sidebar.php"; ?>
+    <?php include "template/hospital-sidebar.php"; //load hospital sidebar?>
 		
 		<!--**********************************
             Content body start
@@ -64,7 +64,7 @@
                                         <tbody>
                                         <?php 
                                         include('includes/db.php');
-                                        $sql = mysqli_query($con,"SELECT * FROM messages WHERE sender = '{$_SESSION["SESSION_EMAIL1"]}'");
+                                        $sql = mysqli_query($con,"SELECT * FROM messages WHERE sender = '{$_SESSION["SESSION_EMAIL1"]}'"); //selecting messages by specific hospital from messages table 
                                         while ($row=mysqli_fetch_array($sql)) {
                                             $id = $row['id'];
                                             $subject = $row['subject'];
@@ -151,6 +151,7 @@
     <?php include("template/script.php") ?>
     <script>
         $(document).ready(function(){
+            // ajax to display full info about the message
             $('.showMessage').click(function(){
                 var showMessage = $(this).attr("id");
 
@@ -211,7 +212,7 @@
 <?php
     }else{
           header("location:hospital-profile.php");
-        exit();
+        exit(); // if info is 0, redirect to profile page
       }
   ?>
   <?php

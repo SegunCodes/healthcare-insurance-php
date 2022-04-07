@@ -1,5 +1,6 @@
 <?php
 if (isset($_POST["showPatient"])) {
+    //show complete record of a specific id 
     include('includes/db.php');
     $output = '';
     $showPatient = $_POST['showPatient'];

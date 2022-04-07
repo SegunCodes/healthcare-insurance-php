@@ -2,7 +2,7 @@
 include('includes/db.php');
 $id = $_GET['del'];
 
-$del = mysqli_query($con, "DELETE FROM messages WHERE id = '$id'");
+$del = mysqli_query($con, "DELETE FROM messages WHERE id = '$id'");  //delete specific message with id
 
 if ($del) {
 	mysqli_close($con);

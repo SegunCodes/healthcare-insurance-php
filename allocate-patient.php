@@ -14,16 +14,16 @@ if (mysqli_num_rows($query)>0) {
 ?>
 <body>
 
-    <?php include("template/preloader.php") ?>
+    <?php include("template/preloader.php") //load preloader?>
 
     <!--**********************************
         Main wrapper start
     ***********************************-->
     <div id="main-wrapper">
 
-        <?php include "template/admin-header.php"; ?>
+        <?php include "template/admin-header.php"; //load admin header?>
 
-        <?php include "template/admin-sidebar.php"; ?>
+        <?php include "template/admin-sidebar.php"; // load admin sidebar?>
         
         <!--**********************************
             Content body start
@@ -59,8 +59,9 @@ if (mysqli_num_rows($query)>0) {
                                         <tbody>
                                         <?php 
                                         include('includes/db.php');
-                                        $sql = mysqli_query($con,"SELECT * FROM hospital ");
+                                        $sql = mysqli_query($con,"SELECT * FROM hospital ");//selecting all from hospital table
                                         while ($row=mysqli_fetch_array($sql)) {
+                                            //selecting each row in hospital table
                                             $id = $row['id'];
                                             $hid = $row['hospital_id'];
                                             $name = $row['name'];
@@ -81,10 +82,11 @@ if (mysqli_num_rows($query)>0) {
                                         <?php
                                             include('includes/db.php');
                                             $msg = "";
+                                            //script to handle patients allocation
                                             if (isset($_POST["submit"])) {
                                                 $h = mysqli_real_escape_string($con, $_POST['hid']);
                                                 $get = mysqli_real_escape_string($con, $_POST['get']);
-                                                $sql = "SELECT * FROM allocation WHERE patient='{$get}'";
+                                                $sql = "SELECT * FROM allocation WHERE patient='{$get}'"; //checking allocation table if patient has been allocated
                                                 $result = mysqli_query($con, $sql);
                                                 if (mysqli_num_rows($result)>0) {
                                                     echo "<script>alert('This Patient has already been allocated to a hospital')</script>";

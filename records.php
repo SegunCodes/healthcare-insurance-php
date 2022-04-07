@@ -1,13 +1,13 @@
-<?php include("template/header.php") ?>
+<?php include("template/header.php") //include header file?>
 <?php
 
-session_start();
+session_start(); // session start
 if (!isset($_SESSION["SESSION_EMAIL1"])) {
-    header("location: index.php");
+    header("location: index.php");  // if session isn't set, user is redirected to index page
     die();
 }
 include('includes/db.php');
-$query = mysqli_query($con, "SELECT * FROM users WHERE email='{$_SESSION['SESSION_EMAIL1']}'");
+$query = mysqli_query($con, "SELECT * FROM users WHERE email='{$_SESSION['SESSION_EMAIL1']}'"); //select exact user from database whose session has begun
 if (mysqli_num_rows($query)>0) {
     $row = mysqli_fetch_assoc($query);
 }
@@ -18,20 +18,20 @@ if (mysqli_num_rows($query)>0) {
       $info = $row['info'];
       ?>
       <?php
-        if ($info == "1") {
+        if ($info == "1") { //if user info == 1 display this
         ?>
 <body>
 
-    <?php include("template/preloader.php") ?>
+    <?php include("template/preloader.php") //load preloader?>
 
     <!--**********************************
         Main wrapper start
     ***********************************-->
     <div id="main-wrapper">
 
-    <?php include "template/hospital-header.php"; ?>
+        <?php include "template/hospital-header.php"; //load hospital header?>
 
-    <?php include "template/hospital-sidebar.php"; ?>
+        <?php include "template/hospital-sidebar.php"; //load hospital sidebar?>
 		
 		<!--**********************************
             Content body start
@@ -58,13 +58,14 @@ if (mysqli_num_rows($query)>0) {
                                                 <th>Patient Name</th>
                                                 <th>Document Name</th>
                                                 <th>View Record</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         
                                         <tbody>
                                         <?php 
                                         include('includes/db.php');
-                                        $sql = mysqli_query($con,"SELECT * FROM hospital WHERE email = '{$_SESSION["SESSION_EMAIL1"]}'");
+                                        $sql = mysqli_query($con,"SELECT * FROM hospital WHERE email = '{$_SESSION["SESSION_EMAIL1"]}'");//select specific hospital whose session is set
                                         //   var_dump($sql);
                                         while ($row=mysqli_fetch_array($sql)) {
                                             $hid = $row["hospital_id"];
@@ -93,6 +94,11 @@ if (mysqli_num_rows($query)>0) {
                                                 <td>
                                                     <div class="d-flex">
 														<a href="#" class="btn btn-primary showRecord shadow sharp mr-1" id="<?php echo $id?>"><i class="fa fa-eye"></i></a>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex">
+                                                        <a onclick="return confirm('Are you sure you want to delete this user?')" href="delete-record.php?del=<?php echo $id;?>" class="btn btn-danger shadow sharp"><i class="fa fa-trash"></i></a>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -160,7 +166,7 @@ if (mysqli_num_rows($query)>0) {
     <?php include("template/script.php") ?>
     <script>
         $(document).ready(function(){
-
+            // ajax to display full record
             $('.showRecord').click(function(){
                 var showPatient = $(this).attr("id");
 

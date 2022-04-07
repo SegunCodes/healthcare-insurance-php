@@ -12,12 +12,13 @@
                 </a>
             </li>
             <?php
-            $sql = mysqli_query($con,"SELECT * FROM users WHERE email = '{$_SESSION["SESSION_EMAIL"]}'");
+            $sql = mysqli_query($con,"SELECT * FROM users WHERE email = '{$_SESSION["SESSION_EMAIL"]}'");//query hospital session using email
             while ($row=mysqli_fetch_array($sql)) {
                 $info = $row['info'];
                 ?>
                 <?php
                     if ($info == "1") {
+                        // the following information will be displayed once the user has entered his unique user id and info is 1
                         echo '
                         <li>
                             <a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">

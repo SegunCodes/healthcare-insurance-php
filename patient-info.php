@@ -1,29 +1,29 @@
-<?php include("template/header.php") ?>
+<?php include("template/header.php") //require header file ?>
 <?php
 
-session_start();
+session_start(); //session start
 if (!isset($_SESSION["SESSION_EMAIL2"])) {
-    header("location: index.php");
+    header("location: index.php"); // if session isn't set, user will be redirected to index page
     die();
 }
 include('includes/db.php');
-$query = mysqli_query($con, "SELECT * FROM users WHERE email='{$_SESSION['SESSION_EMAIL2']}'");
+$query = mysqli_query($con, "SELECT * FROM users WHERE email='{$_SESSION['SESSION_EMAIL2']}'"); //selecting exact user whose session has started
 if (mysqli_num_rows($query)>0) {
     $row = mysqli_fetch_assoc($query);
 }
 ?>
 <body>
 
-    <?php include("template/preloader.php") ?>
+    <?php include("template/preloader.php") //load preloader ?>
 
     <!--**********************************
         Main wrapper start
     ***********************************-->
     <div id="main-wrapper">
 
-        <?php include "template/admin-header.php"; ?>
+        <?php include "template/admin-header.php"; //load admin header?>
 
-        <?php include "template/admin-sidebar.php"; ?>
+        <?php include "template/admin-sidebar.php"; // load admin sidebar?>
         
         <!--**********************************
             Content body start
@@ -57,6 +57,7 @@ if (mysqli_num_rows($query)>0) {
                                         </thead>
                                         <tbody>
                                         <?php 
+                                        // select all from patient and rows from patient table
                                         include('includes/db.php');
                                         $sql = mysqli_query($con,"SELECT * FROM patient ");
                                         while ($row=mysqli_fetch_array($sql)) {
@@ -167,6 +168,7 @@ if (mysqli_num_rows($query)>0) {
     <?php include("template/script.php") ?>
     <script>
         $(document).ready(function(){
+            // ajax to display patient full info
             $('.showPatient').click(function(){
                 var showPatient = $(this).attr("id");
 

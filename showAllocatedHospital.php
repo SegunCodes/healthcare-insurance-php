@@ -1,5 +1,6 @@
 <?php
 if (isset($_POST["showHospital"])) {
+    // display info of hospital that a patient is allocated too
     include('includes/db.php');
     $output = '';
     $showHospital = $_POST['showHospital'];
